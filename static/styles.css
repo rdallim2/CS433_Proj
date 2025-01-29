@@ -1,0 +1,205 @@
+/* styles.css */
+header {
+    background-color: #161616;
+    font-size:larger;
+    color: #fff;
+    padding: 20px 0;
+    border-bottom-style: 2px solid #0f0f0f;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito', sans-serif;
+    background-color:#232D3F;
+    color: #fff;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+a{
+    color: #fff; 
+    text-decoration: none; 
+}
+
+.about-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin: 20px auto;
+    gap: 20px;
+}
+
+.about-text {
+    flex: 3; /* Take up 2/3 of the available space */
+    padding: 10px; /* Add some internal spacing */
+    text-align: left; /* Align text to the left */
+}
+
+
+.about-image {
+    flex: 1;
+    width: 40%;  /* Force the image to take container width */
+    height: 40%; /* Force the image to take container height */
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+/*
+.about-text, .about-image {
+    border: 1px solid red;
+}
+*/
+
+/*------------------------------ HEADER CONTAINER -----------------------*/
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    margin: 20px auto;
+}
+
+.header-container .title{
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+    flex:5 1 auto;
+    justify-content: space-between;
+}
+
+.header-container .header-links {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    flex: 1; 
+}
+  
+.header-container .header-links a {
+    font-weight: bold;
+    flex: 1; 
+    text-align: center; 
+    font-size: 16px; 
+    padding: 5px;
+}
+
+/*------------------------- CONTENT CONTAINER ------------------------------*/
+
+.content-container {
+    display: flex;
+    font-size: medium;
+    height: 84vh;
+}
+
+.content-container > div {
+   /*border: 4px solid white;*/
+    display: flex; /* Ensure all children are flex items */
+    flex-direction: column; /* Align child elements vertically */
+    justify-content: flex-start; /* Align items to the top */
+    height: 100%;
+    border-radius: 15px;
+}
+
+.sidebar {
+    flex: 1;   
+}
+
+.intro, .levels {
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Aligns content to the top */
+    flex: 1;
+    text-align: center;
+    height: 100%;
+    padding: 10px; /* Optional: adds some spacing inside the container */
+}
+
+.sidebar div {
+    display: flex;
+    justify-content: flex-start;
+    border: 4px solid white;
+    flex: 1;
+}
+
+.empty-space {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex: 1;
+    border-radius: 15px;
+    border: 4px solid white;
+}
+
+.io {
+    display: flex;
+    flex-direction: column; /* Arrange items in a column */
+    justify-content: flex-start; /* Align content to the top */
+    align-items: center; /* Horizontally center content */
+    text-align: center;
+    flex: 2;
+    border-radius: 15px;
+    border: 4px solid white;
+    padding: 20px; /* Add padding around the content */
+    gap: 20px; /* Space between elements */
+}
+
+.chat-container {
+    width: 100%; /* Ensure it takes up the full width of the parent */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Space between chat components */
+}
+
+.messages {
+    width: 100%; /* Fill the width of the chat container */
+    height: 300px; /* Set a fixed height for the chat area */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: #fafafa;
+    overflow-y: auto; /* Allow scrolling */
+    color: black;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+textarea {
+    width: 100%; /* Limit width of the textarea */
+    height: 80px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+}
+
+button {
+    width: 100%; /* Same width as the textarea */
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
