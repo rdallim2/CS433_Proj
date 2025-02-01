@@ -7,7 +7,7 @@ function sendMessage() {
     const messagesDiv = document.getElementById('messages');
     const userMessage = document.createElement('div');
     userMessage.textContent = `You: ${prompt}`;
-    userMessage.style.textAlign = "left"; // Align user's message to the left
+    userMessage.classList.add("user-message");
     messagesDiv.appendChild(userMessage);
 
     // Clear the input field after sending the message
@@ -33,7 +33,7 @@ function sendMessage() {
         } else {
             const llmResponse = document.createElement('div');
             llmResponse.textContent = `LLM: ${data.response}`;
-            llmResponse.style.textAlign = "right"; 
+            llmResponse.classList.add("llm-reponse");
             messagesDiv.appendChild(llmResponse);
             console.log("Response should now be displayed.")
         }
@@ -43,3 +43,10 @@ function sendMessage() {
         console.error('Error:', error);
     });
 }
+
+document.getElementById('prompt').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        sendMessage();
+    }
+});
