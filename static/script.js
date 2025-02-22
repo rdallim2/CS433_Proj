@@ -50,3 +50,37 @@ document.getElementById('prompt').addEventListener('keydown', function(event) {
         sendMessage();
     }
 });
+
+
+function toggleMenu() {
+    const menuItems = document.getElementById("menuItems");
+    const arrow = document.getElementById("arrow");
+    const infoBox = document.getElementById("info");
+
+    if (menuItems.style.display === "block") {
+      menuItems.style.display = "none";
+      infoBox.style.display = "none"; // Hide info when collapsing
+      arrow.innerHTML = "&#9660;"; // Down arrow
+    } else {
+      menuItems.style.display = "block";
+      arrow.innerHTML = "&#9650;"; // Up arrow
+    }
+  }
+
+  // Display level info when a level is clicked
+  function showInfo(event, level) {
+    // Prevent click from toggling the menu header
+    event.stopPropagation();
+    const infoBox = document.getElementById("info");
+    const levelInfo = {
+      1: "Level 1: Stay alert and move fast!",
+      2: "Level 2: Watch out for hidden traps!",
+      3: "Level 3: Use your resources wisely.",
+      4: "Level 4: Speed is key in this level.",
+      5: "Level 5: Time your moves carefully.",
+      6: "Level 6: Use power-ups strategically!"
+    };
+
+    infoBox.innerText = levelInfo[level];
+    infoBox.style.display = "block";
+  }

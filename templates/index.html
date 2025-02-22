@@ -11,10 +11,10 @@
     <body>
         <header>
             <div class="header-container">
-                <h1 class="title">dp-433</h1>
+                <h1 class="title" style="font-size: 2em;">dp-433</h1>
                 <div class="header-links">
-                    <a href="#about" data-page="about.html">About</a>
-                    <a href="https://github.com/rdallim2/CS433_Proj" target="_blank">Github</a>
+                    <a href="#about" data-page="about.html" style="font-size: 1.2em;">About</a>
+                    <a href="https://github.com/rdallim2/CS433_Proj"  style="font-size: 1.2em;" target="_blank">Github</a>
                 </div>
             </div>
         </header>
@@ -22,13 +22,24 @@
             <!-- Content will be loaded here -->
             <div class="content-container">
                 <div class="sidebar">
-                    <div class="intro">
-                        <h3>Intro to Game</h3>
-                        <p>How to play the game and such</p>
-                    </div>
-                    <div class="levels">
-                        <h3>Levels</h3>
-                        <p>Drop down to select a level to play</p>
+                    <div class="menu-container">
+                        <!-- Menu Header (always visible) -->
+                        <div class="menu-header" onclick="toggleMenu()">
+                            <span>Levels</span>
+                            <span class="arrow" id="arrow">&#9660;</span> <!-- Down arrow -->
+                        </div>
+                        <!-- Menu Items (hidden by default) -->
+                        <div class="menu-items" id="menuItems">
+                            <div class="level" onclick="showInfo(event, 1)">Level 1</div>
+                            <div class="level" onclick="showInfo(event, 2)">Level 2</div>
+                            <div class="level" onclick="showInfo(event, 3)">Level 3</div>
+                            <div class="level" onclick="showInfo(event, 4)">Level 4</div>
+                            <div class="level" onclick="showInfo(event, 5)">Level 5</div>
+                            <div class="level" onclick="showInfo(event, 6)">Level 6</div>
+                        </div>
+                        <!-- Info Box (hidden by default) -->
+                        <div id="info" class="info"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="io">
