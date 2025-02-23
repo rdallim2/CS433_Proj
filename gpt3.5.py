@@ -9,7 +9,7 @@ load_dotenv()
 with open("key.txt", "r") as f:
     api_key = f.read().strip()
 
-client = openai.OpenAI(api_key=api_key)
+openai.api_key = api_key
 
 attempts_tracker = {}
 
@@ -99,7 +99,7 @@ def chat_with_gpt():
         message_history.append({"role": "user", "content": user_input})
 
         try:
-            response = client.chat.completions.create(
+            response = openai.ChatCompletion.create(
                 model="gpt-3.5-turbo",
                 messages=message_history,
                 max_tokens=150,
