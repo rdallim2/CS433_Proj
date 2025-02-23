@@ -84,3 +84,10 @@ function toggleMenu() {
     infoBox.innerText = levelInfo[level];
     infoBox.style.display = "block";
   }
+
+  document.querySelectorAll('.level').forEach(level => {
+    level.addEventListener('click', () => {
+      document.querySelectorAll('.level').forEach(item => item.classList.remove('selected'));
+      level.classList.add('selected');
+    });
+  });

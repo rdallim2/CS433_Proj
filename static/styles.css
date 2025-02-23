@@ -135,18 +135,25 @@ a{
     padding: 10px;
     margin: 5px 0;
     cursor: pointer;
+    display: block;
     border-radius: 5px;
     text-align: center;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    height: 110px;
+    scrollbar-color: grey transparent; /* Blue thumb, transparent track */
 }
 .info {
-    padding: 10px;
     margin: 5px auto;
-    cursor: pointer;
     border-radius: 5px;
-    width: 87%;
     text-align: center;
     border: 1px solid #ccc;
     transition: background 0.3s ease;
+    width: 87%;
+}
+
+.info:empty {
+    display: none;
 }
 
 
@@ -162,6 +169,11 @@ a{
 
 .level:hover {
     background: #bbb;
+}
+
+.level.selected {
+  background-color: #808298; /* Green or any other color you want */
+  color: white;
 }
 
 
