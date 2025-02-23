@@ -82,32 +82,28 @@ a{
 .content-container > div {
    /*border: 4px solid white;*/
     display: flex; /* Ensure all children are flex items */
-    flex-direction: row; /* Align child elements vertically */
+    flex-direction: column; /* Align child elements vertically */
     justify-content: flex-start; /* Align items to the top */
-    height: 100%;
+    height: auto;
     border-radius: 15px;
 }
 
 
 .sidebar {
-    flex: 1;   
-    /*border: 4px solid white;*/
-    flex-direction: column; /* Ensures that the divs stack vertically */
-    align-items: center; /* Centers the divs horizontally */
-    justify-content: flex-start; /* Aligns divs at the top of the sidebar */
+    flex: 1; /* Fix width but do not let it grow */
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%; /* Set height to match parent */
+    margin: 0; /* Remove auto margins */ */
 }
 
-.sidebar div {
-    display: flex;
-    justify-content: flex-start;
-    /* border: 4px solid white; */
-    flex: 1;
-    width: 70%;
-}
 
 .menu-container {
-    width: 100%; /* Ensure menu container takes the full width */
+    width: 90%; /* Ensure menu container takes the full width */
     margin: 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 10px;
 }
 
 .menu-header {
@@ -115,10 +111,15 @@ a{
     cursor: pointer;
     text-align: center;
     font-weight: bold;
-    border-bottom: 1px solid #bbb;
     display: flex;
-    justify-content: space-between;
+    justify-content: center; /* Center content */
     align-items: center;
+    position: relative;
+}
+
+.menu-header .arrow {
+    position: absolute;
+    right: 10px; /* Adjust as needed */
 }
 
 .menu-header:hover {
@@ -130,15 +131,24 @@ a{
     transition: transform 0.3s ease;
 }
 
-.menu-items,
-.info {
-    display: none;
-    width: 100%;
-}
-
 .menu-items {
     padding: 10px;
+    margin: 5px 0;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
 }
+.info {
+    padding: 10px;
+    margin: 5px auto;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 87%;
+    text-align: center;
+    border: 1px solid #ccc;
+    transition: background 0.3s ease;
+}
+
 
 .level {
     padding: 10px;
@@ -154,16 +164,8 @@ a{
     background: #bbb;
 }
 
-.info {
-    padding: 10px;
-    margin: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    text-align: center;
-}
 
 .io {
-    display: flex;
     flex-direction: column; 
     justify-content: flex-start;
     align-items: center;
@@ -174,11 +176,11 @@ a{
 }
 
 .empty-space {
-    display: flex;
     justify-content: center;
     text-align: center;
-    flex-grow: 1; /* Allow it to take the remaining space */
+    flex: 1; /* Allow it to take the remaining space */
     border-radius: 15px;
+    width: 75%;
     /* border: 4px solid white; */
 }
 .chat-container {
