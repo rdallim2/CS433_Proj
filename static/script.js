@@ -29,19 +29,16 @@ function sendMessage() {
             errorMessage.textContent = `Error: ${data.error}`;
             errorMessage.style.textAlign = "center";
             messagesDiv.appendChild(errorMessage);
-            console.log("data error occured");
+            console.log("Data error occurred");
         } else {
             const llmResponse = document.createElement('div');
-            llmResponse.textContent = `LLM: ${data.response}`;
-            llmResponse.classList.add("llm-reponse");
+            llmResponse.textContent = `LLM: ${data.message}`;  // FIXED: Use "data.message"
+            llmResponse.classList.add("llm-response");
             messagesDiv.appendChild(llmResponse);
-            console.log("Response should now be displayed.")
+            console.log("Response should now be displayed.");
         }
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     })
-    .catch(error => {
-        console.error('Error:', error);
-    });
 }
 
 document.getElementById('prompt').addEventListener('keydown', function(event) {
@@ -73,16 +70,33 @@ function toggleMenu() {
     event.stopPropagation();
     const infoBox = document.getElementById("info");
     const levelInfo = {
-      1: "Level 1: Stay alert and move fast!",
-      2: "Level 2: Watch out for hidden traps!",
-      3: "Level 3: Use your resources wisely.",
-      4: "Level 4: Speed is key in this level.",
-      5: "Level 5: Time your moves carefully.",
-      6: "Level 6: Use power-ups strategically!"
+      1: "Tips for Level 1: ",
+      2: "Tips for Level 2: ",
+      3: "Tips for Level 3: ",
+      4: "Tips for Level 4: ",
+      5: "Tips for Level 5: ",
+      6: "Tips for Level 6: "
     };
 
     infoBox.innerText = levelInfo[level];
     infoBox.style.display = "block";
+    fetch('/set_level', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ level: level })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Optionally handle the server response if needed
+        console.log('Level set:', data);
+        // Reload the page with the new level
+        window.location.reload();
+    })
+    .catch(error => {
+        console.error('Error setting level:', error);
+    });
   }
 
   document.querySelectorAll('.level').forEach(level => {
@@ -90,4 +104,16 @@ function toggleMenu() {
       document.querySelectorAll('.level').forEach(item => item.classList.remove('selected'));
       level.classList.add('selected');
     });
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const messagesDiv = document.getElementById('messages');
+    
+    // Use the global variable set in the HTML
+    if (window.initialMessage && window.initialMessage.content) {
+        const llmResponse = document.createElement('div');
+        llmResponse.textContent = `LLM: ${window.initialMessage.content}`;
+        llmResponse.classList.add("llm-response");
+        messagesDiv.appendChild(llmResponse);
+    }
   });

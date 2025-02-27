@@ -46,6 +46,10 @@
                     <div class="chat-container">
                         <div class="messages" id="messages"></div>
                         <div class="input-container">
+                            <script>
+                                // Make the message available to external JS file
+                                window.initialMessage = {{ initialMessage|tojson|safe }};
+                            </script>
                             <textarea id="prompt" placeholder="Enter your message..."></textarea>
                             <button onclick="sendMessage()">Send</button>
                             
