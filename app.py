@@ -3,7 +3,7 @@ import re
 from graph import DataGraph
 from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
-from pinecone import Pinecone
+import pinecone
 
 from levels import *
 
@@ -14,9 +14,12 @@ attempts_tracker = {}
 current_level = 1
 message_history = [system_prompt]
 
+#OPEN AI KEY
 with open("key.txt", "r") as f:
     api_key = f.read().strip()
 client = openai.OpenAI(api_key=api_key)
+
+
 
 message_history.append(system_prompt)
 
