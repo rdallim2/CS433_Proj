@@ -3,9 +3,14 @@ import re
 from graph import DataGraph
 from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
-import pinecone
-
+from p_db import *
 from levels import *
+
+from pinecone.grpc import PineconeGRPC as Pinecone
+from pinecone import ServerlessSpec
+import time
+import time
+from embeddings_data import *
 
 load_dotenv()
 app = Flask(__name__)
@@ -16,8 +21,12 @@ message_history = [system_prompt]
 
 #OPEN AI KEY
 with open("key.txt", "r") as f:
-    api_key = f.read().strip()
-client = openai.OpenAI(api_key=api_key)
+    openai.api_key = f.read().strip()
+
+with open("p_key.txt", "r") as f:
+    p_api_key = f.read().strip()
+
+pc = Pinecone(api_key=p_api_key)
 
 
 
@@ -47,6 +56,7 @@ def set_level():
         return jsonify({"message": f"Level set to {level}"}), 200
     return jsonify({"error": "Invalid level"}), 400
     
+
 
 @app.route('/ask', methods=['GET', 'POST'])
 def chat_with_gpt():
@@ -94,10 +104,42 @@ def chat_with_gpt():
         message_history.append({"role": "assistant", "content": response_message})
         return jsonify({"message": response_message})
 
+    index_names = ["l3-index"]
+    index = pc.Index(index_names[0])
+
+    try:
+        print("trying to find embedding")
+        query_embedding = get_embedding(user_input)
+        # Query Pinecone for the top 3 most relevant documents.
+        pinecone_results = index.query(query_embedding, top_k=3, include_metadata=True, namespace="ns1")
+        print(pinecone_results)
+        context = "\n".join([match["metadata"].get("text", "") for match in pinecone_results["matches"]])
+    except Exception as e:
+        print("Error retrieving context from Pinecone:", e)
+        context = ""
+
+    if context:
+        print("Context found")
+        context_message = f"Relevant context from the database:\n{context}"
+        message_history.insert(0, {"role": "system", "content": context_message})
+
+    # Append the user input to the conversation.
+    message_history.append({"role": "user", "content": user_input})
+
+    # Optional: Validate message format
+    for message in message_history:
+        if 'role' not in message or 'content' not in message:
+            print(f"Invalid message format: {message}")
+            continue
+
+    # Save the attempts data.
+    dg = DataGraph(attempts_tracker)
+    dg.save_attempts()
+
 
 
     try:
-        response = client.chat.completions.create(
+        response = openai.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=message_history,
             max_tokens=150,

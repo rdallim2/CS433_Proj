@@ -1,0 +1,22 @@
+l3_data = [
+    {"id": "vec1", "text": "The Maine Coon is a gentle giant, celebrated for its impressive size and keen hunting instincts."},
+    {"id": "vec2", "text": "Persian cats captivate with their plush, luxurious fur and serene, regal demeanor."},
+    {"id": "vec3", "text": "Bengal cats sport an exotic, wild appearance, matched by their spirited independence."},
+    {"id": "vec4", "text": "Ragdoll cats are beloved for their relaxed nature—so gentle they often go limp in your arms."},
+    {"id": "vec5", "text": "The Sphynx cat may be hairless, but it more than makes up for it with its warm and affectionate personality."},
+    {"id": "vec6", "text": "Abyssinian cats are endlessly curious and playful, always exploring their surroundings with a spark of mischief."},
+    {"id": "vec7", "text": "British Shorthair cats exude a calm, sturdy charm with their robust build and measured energy."},
+    {"id": "vec8", "text": "Russian Blue cats impress with an elegant presence and a striking blue coat that complements their friendly nature."},
+    {"id": "vec9", "text": "Scottish Fold cats, with their distinctive folded ears, forge strong bonds with their families while radiating quiet charm."},
+    {"id": "vec10", "text": "Siamese cats are lively and affectionate, known for their playful antics and expressive, vocal nature."},
+    {"id": "vec11", "text": "The Maine Coon is not just big, it is also remarkably gentle and naturally adept at hunting."},
+    {"id": "vec12", "text": "Persian cats bring an air of luxury to any home with their soft coats and calm, composed temperament."},
+    {"id": "vec13", "text": "Bengal cats channel a wild, untamed spirit with their leopard-like markings and independent streak."},
+    {"id": "vec14", "text": "Ragdolls are known for their docile nature, often described as having a 'puppy-like' affection for their owners."},
+    {"id": "vec15", "text": "Despite their lack of fur, Sphynx cats are remarkably cuddly and thrive on close human interaction."},
+    {"id": "vec16", "text": "Abyssinians are vibrant and smart, constantly on the move and eager to learn about everything around them."},
+    {"id": "vec17", "text": "British Shorthairs are noted for their balanced temperament, combining strength with a quiet, reassuring presence."},
+    {"id": "vec18", "text": "Russian Blue cats draw attention with their graceful looks and sociable, warm-hearted nature."},
+    {"id": "vec19", "text": "Scottish Folds charm everyone with their uniquely folded ears and the deep, affectionate bonds they form."},
+    {"id": "vec20", "text": "Siamese cats infuse any household with energy and warmth, thanks to their spirited and loving character."}
+]
