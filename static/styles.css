@@ -113,6 +113,7 @@ a{
     margin: 0 auto;
     border: 1px solid #ccc;
     border-radius: 10px;
+    height: 90%;
 }
 
 .menu-header {
@@ -149,7 +150,20 @@ a{
     text-align: center;
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
-    height: 110px;
+    height: 50%;
+    scrollbar-color: grey transparent; /* Blue thumb, transparent track */
+}
+
+.data-items {
+    padding: 10px;
+    margin: 5px 0;
+    cursor: pointer;
+    display: block;
+    border-radius: 5px;
+    text-align: center;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    height: 85%;
     scrollbar-color: grey transparent; /* Blue thumb, transparent track */
 }
 .info {

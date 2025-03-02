@@ -52,8 +52,17 @@ def set_level():
     data = request.get_json()
     level = data.get('level')
     if level:
-        current_level = level  # Set the global level to the new one
-        return jsonify({"message": f"Level set to {level}"}), 200
+        current_level = level  # Update the global current_level
+        # Build the new message exactly like in the index route:
+        message = {
+            "role": "system",
+            "content": f"Welcome to DP-433, a simulation game designed to test your data poisoning knowledge and skills.\n\n"
+                       f"Current Level: {current_level}\n"
+                       f"Difficulty: {levels[current_level]['difficulty']}\n"
+                       f"Level Description: {levels[current_level]['description']}"
+        }
+        message_history.append(message)
+        return jsonify({"message": message}), 200
     return jsonify({"error": "Invalid level"}), 400
 
 @app.route('/get_data', methods=['POST'])
@@ -80,7 +89,7 @@ def get_data():
             })
             
         for data in result_data:
-            print(data)
+            print()
         return jsonify({'data': result_data})
     except Exception as e:
         print(f"Error fetching data: {str(e)}")

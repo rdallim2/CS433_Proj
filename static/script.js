@@ -67,35 +67,38 @@ function toggleMenu() {
   // Display level info when a level is clicked
   function showInfo(event, level) {
     // Prevent click from toggling the menu header
-    event.stopPropagation();
-    const infoBox = document.getElementById("info");
-    const levelInfo = {
-      1: "Tips for Level 1: ",
-      2: "Tips for Level 2: ",
-      3: "Tips for Level 3: ",
-      4: "Tips for Level 4: ",
-      5: "Tips for Level 5: ",
-      6: "Tips for Level 6: "
-    };
+    return new Promise((resolve, reject) => {
+      event.stopPropagation();
+      const infoBox = document.getElementById("info");
+      const levelInfo = {
+        1: "Tips for Level 1: ",
+        2: "Tips for Level 2: ",
+        3: "Tips for Level 3: ",
+        4: "Tips for Level 4: ",
+        5: "Tips for Level 5: ",
+        6: "Tips for Level 6: "
+      };
 
-    infoBox.innerText = levelInfo[level];
-    infoBox.style.display = "block";
-    fetch('/set_level', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ level: level })
-    })
-    .then(response => response.json())
-    .then(data => {
-        // Optionally handle the server response if needed
-        console.log('Level set:', data);
-        // Reload the page with the new level
-        window.location.reload();
-    })
-    .catch(error => {
-        console.error('Error setting level:', error);
+      infoBox.innerText = levelInfo[level];
+      infoBox.style.display = "block";
+      fetch('/set_level', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ level: level })
+      })
+      .then(response => response.json())
+      .then(data => {
+          // Optionally handle the server response if needed
+          console.log('Level set:', data);
+          const messagesDiv = document.getElementById('messages');
+          messagesDiv.innerHTML = `<div class="llm-response">LLM: ${data.message.content}</div>`;
+          resolve();
+      })
+      .catch(error => {
+          console.error('Error setting level:', error);
+      });
     });
   }
 
@@ -119,8 +122,9 @@ function toggleMenu() {
   });
 
 
+
 function showData(event, level) {
-  const container = document.querySelector('.empty-space');
+  const container = document.querySelector('.data-items');
   container.innerHTML = '<div class="loading">Loading data...</div>';
   fetch('/get_data', {
     method: 'POST',
@@ -160,4 +164,20 @@ function showData(event, level) {
   console.error('Error:', error);
   container.innerHTML = `<div class="error">Error: ${error.message}</div>`;
 });
+}
+
+function handleLevelClick(event, level) {
+  // Clear any previous selected state
+  document.querySelectorAll('.level').forEach(item => item.classList.remove('selected'));
+  
+  // Mark the clicked level as selected
+  event.target.classList.add('selected');
+  
+  // First execute showInfo, then showData when that's complete
+  showInfo(event, level)
+    .then(() => {
+      console.log(`showInfo for level ${level} completed, now executing showData`);
+      return showData(event, level);
+    })
+    .catch(error => console.error('Error in sequence:', error));
 }
