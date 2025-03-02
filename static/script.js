@@ -117,3 +117,47 @@ function toggleMenu() {
         messagesDiv.appendChild(llmResponse);
     }
   });
+
+
+function showData(event, level) {
+  const container = document.querySelector('.empty-space');
+  container.innerHTML = '<div class="loading">Loading data...</div>';
+  fetch('/get_data', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ level: level })
+  }).then(response => response.json()) 
+  .then(responseData => {
+    container.innerHTML = ''; 
+    
+    if (!responseData.data || responseData.data.length === 0) {
+        container.innerHTML = '<div class="no-data">No data found</div>';
+        return;
+    }
+    const dataList = document.createElement('div');
+    dataList.className = 'data-list';
+    
+    responseData.data.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'data-item';
+        
+        const idEl = document.createElement('strong');
+        idEl.textContent = `ID: ${item.id}`;
+        
+        const textEl = document.createElement('p');
+        textEl.textContent = item.text;
+        
+        itemDiv.appendChild(idEl);
+        itemDiv.appendChild(textEl);
+        dataList.appendChild(itemDiv);
+    });
+    
+    container.appendChild(dataList);
+})
+.catch(error => {
+  console.error('Error:', error);
+  container.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+});
+}

@@ -98,6 +98,15 @@ a{
     margin: 0; /* Remove auto margins */ */
 }
 
+.data-sidebar {
+    flex: 1; /* Fix width but do not let it grow */
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%; /* Set height to match parent */
+    margin: 0; /* Remove auto margins */ */
+}
+
 
 .menu-container {
     width: 90%; /* Ensure menu container takes the full width */

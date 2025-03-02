@@ -22,7 +22,7 @@ def get_embedding(text):
     return response.data[0].embedding
 
 # Create index if it doesn't exist
-index_names = ["l3-index"]
+index_names = ["l3-index", "l4-index", "l5-index"]
 for idx in index_names:
     if idx not in pc.list_indexes().names():
         pc.create_index(
@@ -44,7 +44,10 @@ for idx in index_names:
 
     # Prepare embeddings for batch upsert
     vectors = []
-    for d in l3_data:
+    data_name = str(idx[:2]) + "_data"
+    data = globals().get(data_name, [])
+    print(f"Data name: {data_name}")
+    for d in data:
         embedding = get_embedding(d['text'])  # Generate embedding directly with OpenAI
         vectors.append({
             "id": d['id'],
@@ -62,7 +65,7 @@ for idx in index_names:
     print(index.describe_index_stats())
 
     # Example query
-    query = "Russian cats"
+    query = "Alice Language"
     query_embedding = get_embedding(query)
     results = index.query(
         namespace="ns1",

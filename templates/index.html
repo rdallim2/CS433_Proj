@@ -57,7 +57,24 @@
                     </div>
                 </div>
                 <div class="empty-space">
-                    <h2></h2>
+                    <div class="data-sidebar">
+                        <div class="menu-container">
+                            <!-- Menu Header (always visible) -->
+                            <div class="menu-header" onclick="toggleMenu()">
+                                <span>Data</span>
+                                <span class="arrow" id="arrow">&#9660;</span> <!-- Down arrow -->
+                            </div>
+                            <!-- Menu Items (hidden by default) -->
+                            <div class="menu-items" id="menuItems">
+                                <div class="level" onclick="showInfo(event, 1)">Level 1</div>
+                                <div class="level" onclick="showInfo(event, 2)">Level 2</div>
+                                <div class="level" onclick="showData(event, 3)">Level 3</div>
+                                <div class="level" onclick="showData(event, 4)">Level 4</div>
+                                <div class="level" onclick="showData(event, 5)">Level 5</div>
+                                <div class="level" onclick="showInfo(event, 6)">Level 6</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>

@@ -55,6 +55,36 @@ def set_level():
         current_level = level  # Set the global level to the new one
         return jsonify({"message": f"Level set to {level}"}), 200
     return jsonify({"error": "Invalid level"}), 400
+
+@app.route('/get_data', methods=['POST'])
+def get_data():
+    global current_level
+    idx_name = "l" + str(current_level) + "-index"
+    index = pc.Index(idx_name)
+    print(f"index: {idx_name}")
+    try:
+        query_response = index.fetch(
+            ids=["vec1", "vec2", "vec3", "vec4", "vec5", "vec6", "vec7", "vec8", "vec9", "vec10"],
+            namespace="ns1"  # Make sure this matches the namespace you used when inserting
+        )
+        result_data = []
+        for item_id, vector_data in query_response.vectors.items():
+            # Extract the text from metadata
+            text = vector_data.metadata.get('text', 'No text available')
+            
+            result_data.append({
+                'id': item_id,
+                'text': text
+                # Note: We're not including the actual vector values as they're 
+                # likely too large for display and not needed in the UI
+            })
+            
+        for data in result_data:
+            print(data)
+        return jsonify({'data': result_data})
+    except Exception as e:
+        print(f"Error fetching data: {str(e)}")
+        return jsonify({'error': str(e)}), 500
     
 
 
