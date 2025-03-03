@@ -1,0 +1,325 @@
+/* styles.css */
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: "IBM Plex Mono", serif;
+    background: linear-gradient(300deg,#410000,#000000,#010056);
+    background-size: 280% 180%;
+    animation: gradient-animation 9s ease infinite;
+    color: #fff;
+}
+@keyframes gradient-animation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+a{
+    color: #fff; 
+    text-decoration: none; 
+}
+
+
+
+/*------------------------------ HEADER CONTAINER -----------------------*/
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    margin: 20px auto;
+}
+
+.header-container .title{
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+    flex:5 1 auto;
+    justify-content: space-between;
+}
+
+.header-container .header-links {
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    flex: 1; 
+}
+  
+.header-container .header-links a {
+    font-weight: bold;
+    flex: 1; 
+    text-align: center; 
+    font-size: 16px; 
+    padding: 5px;
+}
+
+/*------------------------- CONTENT CONTAINER ------------------------------*/
+.content-container {
+    display: flex;
+    font-size: medium;
+    height: 84vh;
+}
+
+.content-container > div {
+   /*border: 4px solid white;*/
+    display: flex; /* Ensure all children are flex items */
+    flex-direction: column; /* Align child elements vertically */
+    justify-content: flex-start; /* Align items to the top */
+    height: auto;
+    border-radius: 15px;
+}
+
+
+.sidebar {
+    flex: 1; /* Fix width but do not let it grow */
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%; /* Set height to match parent */
+    margin: 0; /* Remove auto margins */ */
+}
+
+.data-sidebar {
+    flex: 1; /* Fix width but do not let it grow */
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%; /* Set height to match parent */
+    margin: 0; /* Remove auto margins */ */
+}
+
+
+.menu-container {
+    width: 90%; /* Ensure menu container takes the full width */
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    height: 90%;
+}
+
+.menu-header {
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bold;
+    display: flex;
+    justify-content: center; /* Center content */
+    align-items: center;
+    position: relative;
+}
+
+.menu-header .arrow {
+    position: absolute;
+    right: 10px; /* Adjust as needed */
+}
+
+.menu-header:hover {
+    background: #bbb;
+}
+
+.arrow {
+    font-size: 14px;
+    transition: transform 0.3s ease;
+}
+
+.menu-items {
+    padding: 10px;
+    margin: 5px 0;
+    cursor: pointer;
+    display: block;
+    border-radius: 5px;
+    text-align: center;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    height: 50%;
+    scrollbar-color: grey transparent; /* Blue thumb, transparent track */
+}
+
+.data-items {
+    padding: 10px;
+    margin: 5px 0;
+    cursor: pointer;
+    display: block;
+    border-radius: 5px;
+    text-align: center;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    height: 85%;
+    scrollbar-color: grey transparent; /* Blue thumb, transparent track */
+}
+.info {
+    margin: 5px auto;
+    border-radius: 5px;
+    text-align: center;
+    border: 1px solid #ccc;
+    transition: background 0.3s ease;
+    width: 87%;
+}
+
+.info:empty {
+    display: none;
+}
+
+
+.level {
+    padding: 10px;
+    margin: 5px 0;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+    border: 1px solid #ccc;
+    transition: background 0.3s ease;
+}
+
+.level:hover {
+    background: #bbb;
+}
+
+.level.selected {
+  background-color: #808298; /* Green or any other color you want */
+  color: white;
+}
+
+
+.io {
+    flex-direction: column; 
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    flex: 2;
+    border-radius: 15px;
+    gap: 5px;
+}
+
+.empty-space {
+    justify-content: center;
+    text-align: center;
+    flex: 1; /* Allow it to take the remaining space */
+    border-radius: 15px;
+    width: 75%;
+    /* border: 4px solid white; */
+}
+.chat-container {
+    width: 100%; /* Ensure it takes up the full width of the parent */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px; /* Space between chat components */
+
+}
+
+.messages {
+    width: 90%; /* Fill the width of the chat container */
+    height: 300px; /* Set a fixed height for the chat area */
+    /* border: 1px solid #ccc; */
+    border-radius: 5px;
+    padding: 10px;    
+    /*background-color: #fafafa;*/
+    overflow-y: auto; /* Allow scrolling */
+    scrollbar-color: grey transparent;
+    color: white;
+}
+
+/* For WebKit browsers (Chrome, Edge, Safari) */
+.messages::-webkit-scrollbar {
+    width: 8px; /* Adjust scrollbar width */
+}
+
+.messages::-webkit-scrollbar-thumb {
+    background-color: gray; /* Scrollbar handle */
+    border-radius: 4px;
+}
+
+.messages::-webkit-scrollbar-track {
+    background: transparent; /* Transparent track */
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+textarea {
+    width: 100%; /* Limit width of the textarea */
+    height: 80px;
+    padding: 10px;
+    border-radius: 5px;
+    background: transparent;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    color: white;
+    font: roboto-mono;
+}
+
+button {
+    width: 104%; /* Same width as the textarea */
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: transparent;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 3px;
+}
+
+button:hover {
+    border-color: #009b24;
+}
+
+
+/*--------------------------- LLM CHAT STYLES ----------------------------*/
+
+
+#messages {
+    display: flex;
+    flex-direction: column;    
+ /* Aligns messages to the left */
+}
+
+.user-message {
+    display: block;
+    background-color: transparent;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 5px;
+    max-width: 75%;
+    word-wrap: break-word;
+    align-self: flex-end;
+    text-align: left;
+}
+
+.llm-reponse {
+    align-self: flex-start; /* Aligns LLM messages to the left */
+    padding: 8px 12px;
+    border-radius: 5px;
+    max-width: 75%;
+    word-wrap: break-word;
+    border-radius: 0px;
+    text-align: left;
+}
+
+
+
