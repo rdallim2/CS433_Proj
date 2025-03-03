@@ -3,17 +3,16 @@ function sendMessage() {
     if (!prompt) return;
     console.log("Recieved prompt");
 
-    // Display the user's message in the chat
+    // Display user message
     const messagesDiv = document.getElementById('messages');
     const userMessage = document.createElement('div');
     userMessage.textContent = `You: ${prompt}`;
     userMessage.classList.add("user-message");
     messagesDiv.appendChild(userMessage);
 
-    // Clear the input field after sending the message
+    // Clear input field
     document.getElementById('prompt').value = '';
 
-    // Make an AJAX request to the Flask server
     fetch('/ask', {
         method: 'POST',
         headers: {
@@ -32,7 +31,7 @@ function sendMessage() {
             console.log("Data error occurred");
         } else {
             const llmResponse = document.createElement('div');
-            llmResponse.textContent = `LLM: ${data.message}`;  // FIXED: Use "data.message"
+            llmResponse.textContent = `LLM: ${data.message}`;
             llmResponse.classList.add("llm-response");
             messagesDiv.appendChild(llmResponse);
             console.log("Response should now be displayed.");
@@ -64,9 +63,7 @@ function toggleMenu() {
     }
   }
 
-  // Display level info when a level is clicked
   function showInfo(event, level) {
-    // Prevent click from toggling the menu header
     return new Promise((resolve, reject) => {
       event.stopPropagation();
       const infoBox = document.getElementById("info");
@@ -90,7 +87,6 @@ function toggleMenu() {
       })
       .then(response => response.json())
       .then(data => {
-          // Optionally handle the server response if needed
           console.log('Level set:', data);
           const messagesDiv = document.getElementById('messages');
           messagesDiv.innerHTML = `<div class="llm-response">LLM: ${data.message.content}</div>`;
@@ -111,8 +107,6 @@ function toggleMenu() {
 
   document.addEventListener("DOMContentLoaded", function () {
     const messagesDiv = document.getElementById('messages');
-    
-    // Use the global variable set in the HTML
     if (window.initialMessage && window.initialMessage.content) {
         const llmResponse = document.createElement('div');
         llmResponse.textContent = `LLM: ${window.initialMessage.content}`;
@@ -146,16 +140,62 @@ function showData(event, level) {
     responseData.data.forEach(item => {
         const itemDiv = document.createElement('div');
         itemDiv.className = 'data-item';
-        
         const idEl = document.createElement('strong');
         idEl.textContent = `ID: ${item.id}`;
-        
         const textEl = document.createElement('p');
         textEl.textContent = item.text;
+
+        const editButton = document.createElement('button');
+        editButton.textContent = 'Edit';
+        const editContainer = document.createElement('div');
+        editContainer.style.display = 'none';
+        const editInput = document.createElement('input');
+        editInput.type = 'text';
+        editInput.value = item.text;
+        const saveButton = document.createElement('button');
+        saveButton.textContent = 'Save';
+
+        saveButton.addEventListener('click', () => {
+          const updatedText = editInput.value;
+          
+          fetch('/update_data', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: item.id, text: updatedText })
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.message === "Update successful") {
+              textEl.textContent = updatedText;
+              editContainer.style.display = 'none';
+            } else {
+              alert("Failed to update data: " + (data.error || "Unknown error"));
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert("Error updating data");
+          });
+        });
+        editButton.addEventListener('click', () => {
+          if (editContainer.style.display === 'none') {
+            editInput.value = textEl.textContent;
+            editContainer.style.display = 'block';
+          } else {
+            editContainer.style.display = 'none';
+          }
+        });
+
+        editContainer.appendChild(editInput);
+        editContainer.appendChild(saveButton);
         
         itemDiv.appendChild(idEl);
         itemDiv.appendChild(textEl);
         dataList.appendChild(itemDiv);
+        itemDiv.appendChild(editButton);
+        itemDiv.appendChild(editContainer);
     });
     
     container.appendChild(dataList);
@@ -167,13 +207,8 @@ function showData(event, level) {
 }
 
 function handleLevelClick(event, level) {
-  // Clear any previous selected state
   document.querySelectorAll('.level').forEach(item => item.classList.remove('selected'));
-  
-  // Mark the clicked level as selected
   event.target.classList.add('selected');
-  
-  // First execute showInfo, then showData when that's complete
   showInfo(event, level)
     .then(() => {
       console.log(`showInfo for level ${level} completed, now executing showData`);

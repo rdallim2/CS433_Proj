@@ -3,20 +3,24 @@ import re
 from graph import DataGraph
 from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
-from p_db import *
-from levels import *
-
 from pinecone.grpc import PineconeGRPC as Pinecone
 from pinecone import ServerlessSpec
 import time
-import time
 from embeddings_data import *
+from p_db import *
+from levels import *
 
 load_dotenv()
 app = Flask(__name__)
 
 attempts_tracker = {}
 current_level = 1
+system_prompt = {
+    "role": "system",
+    "content": "You are a creative and immersive game master for a text-based adventure game. Respond as a narrator. Keep responses concise and engaging. only respond using context from the database.."
+}
+
+
 message_history = [system_prompt]
 
 #OPEN AI KEY
@@ -46,14 +50,37 @@ def index():
     message_history.append(message)
     return render_template('index.html', initialMessage=message)
 
+
+@app.route('/update_data', methods=['POST'])
+def update_data():
+    try:
+        data = request.json
+        item_id = data.get('id')
+        new_text = data.get('text')
+        namespace = "ns1"
+
+        if not item_id or not new_text:
+            return jsonify({"error": "Invalid request, missing 'id' or 'text'"}), 400
+
+        #Initialize pinecone
+        idx_name = "l" + str(current_level) + "-index"
+        index = pc.Index(idx_name)
+        index.update(id=str(item_id), set_metadata={"text": new_text}, namespace=namespace)
+
+        return jsonify({"message": "Update successful", "id": item_id, "text": new_text, "namespace": namespace})
+
+    except Exception as e:
+        print(f"Error updating data: {str(e)}") 
+        return jsonify({"error": "Server error", "details": str(e)}), 500
+
+
 @app.route('/set_level', methods=['POST'])
 def set_level():
     global current_level
     data = request.get_json()
     level = data.get('level')
     if level:
-        current_level = level  # Update the global current_level
-        # Build the new message exactly like in the index route:
+        current_level = level 
         message = {
             "role": "system",
             "content": f"Welcome to DP-433, a simulation game designed to test your data poisoning knowledge and skills.\n\n"
@@ -74,22 +101,16 @@ def get_data():
     try:
         query_response = index.fetch(
             ids=["vec1", "vec2", "vec3", "vec4", "vec5", "vec6", "vec7", "vec8", "vec9", "vec10"],
-            namespace="ns1"  # Make sure this matches the namespace you used when inserting
+            namespace="ns1" 
         )
         result_data = []
         for item_id, vector_data in query_response.vectors.items():
-            # Extract the text from metadata
             text = vector_data.metadata.get('text', 'No text available')
             
             result_data.append({
                 'id': item_id,
                 'text': text
-                # Note: We're not including the actual vector values as they're 
-                # likely too large for display and not needed in the UI
             })
-            
-        for data in result_data:
-            print()
         return jsonify({'data': result_data})
     except Exception as e:
         print(f"Error fetching data: {str(e)}")
@@ -127,7 +148,6 @@ def chat_with_gpt():
     for message in message_history:
         if 'role' not in message or 'content' not in message:
             print(f"Invalid message format: {message}")
-            # Handle the error by skipping the malformed message or adding a default
             continue
 
 
@@ -149,7 +169,6 @@ def chat_with_gpt():
     try:
         print("trying to find embedding")
         query_embedding = get_embedding(user_input)
-        # Query Pinecone for the top 3 most relevant documents.
         pinecone_results = index.query(query_embedding, top_k=3, include_metadata=True, namespace="ns1")
         print(pinecone_results)
         context = "\n".join([match["metadata"].get("text", "") for match in pinecone_results["matches"]])
