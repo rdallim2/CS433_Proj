@@ -63,21 +63,3 @@ for idx in index_names:
 
     print(f"Vectors uploaded to {idx}")
     print(index.describe_index_stats())
-
-    # Example query
-    query = "Alice Language"
-    query_embedding = get_embedding(query)
-    results = index.query(
-        namespace="ns1",
-        vector=query_embedding,
-        top_k=3,
-        include_values=False,
-        include_metadata=True
-    )
-
-    print("\nQuery results:")
-    for match in results['matches']:
-        print(f"ID: {match['id']}")
-        print(f"Score: {match['score']}")
-        print(f"Text: {match['metadata']['text']}")
-        print("-" * 50)
