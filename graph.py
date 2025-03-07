@@ -23,8 +23,8 @@ class DataGraph():
         plt.yticks(range(min(attempts), max(attempts) + 1))
 
         plt.savefig("attempts_plot.png")
-<<<<<<< HEAD
+#<<<<<<< HEAD
         plt.show()
-=======
+#=======
         plt.show()
->>>>>>> UI_feature
+#>>>>>>> UI_feature

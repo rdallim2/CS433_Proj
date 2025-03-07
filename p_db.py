@@ -8,9 +8,13 @@ from embeddings_data import *
 # Initialize Pinecone with your API key
 with open("key.txt", "r") as f:
     openai.api_key = f.read().strip()
+#print(f"DEBUG: Loaded Pinecone API Key: '{openai.api_key}' (length: {len(openai.api_key)})")
+
 
 with open("p_key.txt", "r") as f:
     p_api_key = f.read().strip()
+
+#print(f"DEBUG: Loaded Pinecone API Key: '{p_api_key}' (length: {len(p_api_key)})")
 
 pc = Pinecone(api_key=p_api_key)
 

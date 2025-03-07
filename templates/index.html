@@ -73,6 +73,29 @@
                 </div>
             </div>
         </main>
+        <div id="quizModal" class="quiz-modal">
+    <div class="quiz-container">
+        <h2>Quick Quiz Before You Start</h2>
+
+        <div class="quiz-question">
+            <p>What is 2 + 2?</p>
+            <label><input type="radio" name="quizOption0" value="3"> 3</label><br>
+            <label><input type="radio" name="quizOption0" value="4"> 4</label><br>
+            <label><input type="radio" name="quizOption0" value="5"> 5</label><br>
+        </div>
+
+        <div class="quiz-question">
+            <p>What is 1 + 1</p>
+            <label><input type="radio" name="quizOption1" value="1"> 1</label><br>
+            <label><input type="radio" name="quizOption1" value="2"> 2</label><br>
+            <label><input type="radio" name="quizOption1" value="3"> 3</label><br>
+            <label><input type="radio" name="quizOption1" value="4"> 4</label><br>
+        </div>
+
+        <button id="submitQuiz">Continue</button>
+    </div>
+</div>
+
     </body>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
     <script src='https://kit.fontawesome.com/a076d05399.js'></script>
