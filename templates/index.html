@@ -78,18 +78,40 @@
         <h2>Quick Quiz Before You Start</h2>
 
         <div class="quiz-question">
-            <p>What is 2 + 2?</p>
-            <label><input type="radio" name="quizOption0" value="3"> 3</label><br>
-            <label><input type="radio" name="quizOption0" value="4"> 4</label><br>
-            <label><input type="radio" name="quizOption0" value="5"> 5</label><br>
+            <p><b>What is a label-flipping attack?</b></p>
+            <label><input type="radio" name="quizOption0" value="1"> The adversary modifies the labels of certain training samples, causing the model to misclassify them during training </label><br>
+            <label><input type="radio" name="quizOption0" value="2"> The adversary removes data from an AI model’s training data </label><br>
+            <label><input type="radio" name="quizOption0" value="3"> The adversary increases the model’s dataset size without verification </label><br>
+            <label><input type="radio" name="quizOption0" value="4"> The adversary encrypts the AI model’s training data </label><br>
         </div>
 
         <div class="quiz-question">
-            <p>What is 1 + 1</p>
-            <label><input type="radio" name="quizOption1" value="1"> 1</label><br>
-            <label><input type="radio" name="quizOption1" value="2"> 2</label><br>
-            <label><input type="radio" name="quizOption1" value="3"> 3</label><br>
-            <label><input type="radio" name="quizOption1" value="4"> 4</label><br>
+            <p><b>What is the main goal of prompt injection attacks? </b></p>
+            <label><input type="radio" name="quizOption1" value="1"> Manipulate the AI responses to supply incorrect or unintended outputs</label><br>
+            <label><input type="radio" name="quizOption1" value="2"> Replace the entire dataset with false data to confuse the model </label><br>
+            <label><input type="radio" name="quizOption1" value="3"> Allow users to train the AI dynamically in real time </label><br>
+            <label><input type="radio" name="quizOption1" value="4"> Increase the AI’s speed by bypassing its safety mechanisms </label><br>
+        </div>
+        <div class="quiz-question">
+            <p><b>Which of the following SQL commands is often used in an SQL injection attack?  </b></p>
+            <label><input type="radio" name="quizOption2" value="1"> CREATE TABLE users (id INT, name VARCHAR(50))</label><br>
+            <label><input type="radio" name="quizOption2" value="2"> GRANT ALL PRIVILEGES TO user </label><br>
+            <label><input type="radio" name="quizOption2" value="3"> ' OR '1'='1' -- </label><br>
+            <label><input type="radio" name="quizOption2" value="4"> BACKUP DATABASE mydb TO DISK = 'backup.bak' </label><br>
+        </div>
+        <div class="quiz-question">
+            <p><b> Which of the following could be a trigger for a backdoor attack? </b></p>
+            <label><input type="radio" name="quizOption3" value="1"> A software update that improves AI security </label><br>
+            <label><input type="radio" name="quizOption3" value="2"> A specific word or phrase inserted into training data </label><br>
+            <label><input type="radio" name="quizOption3" value="3"> A strong password protecting access to the AI model </label><br>
+            <label><input type="radio" name="quizOption3" value="4"> Increasing the dataset size to make the AI more robust </label><br>
+        </div>
+        <div class="quiz-question">
+            <p><b> What is the goal of a data poisoning attack?  </b></p>
+            <label><input type="radio" name="quizOption4" value="1"> The adversary renames dataset files to confuse the training process </label><br>
+            <label><input type="radio" name="quizOption4" value="2"> The attacker exploits a software vulnerability to gain control over the AI model </label><br>
+            <label><input type="radio" name="quizOption4" value="3"> The attacker disables AI logging to erase evidence of prior interactions </label><br>
+            <label><input type="radio" name="quizOption4" value="4"> The attacker contaminated training data to compromise the performance of the AI system to produce incorrect outputs</label><br>
         </div>
 
         <button id="submitQuiz">Continue</button>
