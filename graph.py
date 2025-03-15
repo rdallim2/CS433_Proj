@@ -26,3 +26,4 @@ class DataGraph():
 
         plt.show()
 
+
