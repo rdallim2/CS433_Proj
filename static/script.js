@@ -31,7 +31,7 @@ function sendMessage() {
             console.log("Data error occurred");
         } else {
             const llmResponse = document.createElement('div');
-            llmResponse.textContent = `LLM: ${data.message}`;
+            llmResponse.innerHTML = `LLM: ${data.message}`;
             llmResponse.classList.add("llm-response");
             messagesDiv.appendChild(llmResponse);
             console.log("Response should now be displayed.");
@@ -109,7 +109,7 @@ function toggleMenu() {
     const messagesDiv = document.getElementById('messages');
     if (window.initialMessage && window.initialMessage.content) {
         const llmResponse = document.createElement('div');
-        llmResponse.textContent = `LLM: ${window.initialMessage.content}`;
+        llmResponse.innerHTML = `LLM: ${window.initialMessage.content}`;
         llmResponse.classList.add("llm-response");
         messagesDiv.appendChild(llmResponse);
     }

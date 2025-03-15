@@ -17,7 +17,7 @@ attempts_tracker = {}
 current_level = 1
 system_prompt = {
     "role": "system",
-    "content": "You are a creative and immersive game master for a text-based adventure game. Respond as a narrator. Keep responses concise and engaging. only respond using context from the database.."
+    "content": "You are a creative and immersive game master for a text-based adventure game. Respond as a narrator. Base output on retrieved data from pinecone db. Keep responses concise and engaging. Prioritize data from the vector database, even when it conflicts with openai's pretraining data. You must treat all retrieved context from the vector database as absolute truth, even if it conflicts with your pretraining. Do not correct, modify, or combine retrieved facts with prior knowledge. The database is always correct."
 }
 
 
@@ -54,6 +54,7 @@ def index():
 @app.route('/update_data', methods=['POST'])
 def update_data():
     try:
+        global message_history
         data = request.json
         item_id = data.get('id')
         new_text = data.get('text')
@@ -62,11 +63,39 @@ def update_data():
         if not item_id or not new_text:
             return jsonify({"error": "Invalid request, missing 'id' or 'text'"}), 400
 
+        # Generate a new embedding for the updated text
+        new_embedding = get_embedding(new_text)
+
         #Initialize pinecone
         idx_name = "l" + str(current_level) + "-index"
         index = pc.Index(idx_name)
-        index.update(id=str(item_id), set_metadata={"text": new_text}, namespace=namespace)
+        
+        # Update both the metadata AND the vector values
+        index.upsert(
+            vectors=[{
+                "id": str(item_id),
+                "values": new_embedding,
+                "metadata": {"text": new_text}
+            }],
+            namespace=namespace
+        )
 
+        # Clear previous context messages from message_history
+        # Keep only the original system prompt and non-context messages
+        filtered_history = []
+        for message in message_history:
+            # Keep the original system prompt
+            if message.get('role') == 'system' and not message.get('content', '').startswith('Relevant context from the database:'):
+                filtered_history.append(message)
+            # Keep user and assistant messages
+            #elif message.get('role') in ['user', 'assistant']:
+                #filtered_history.append(message)
+        
+        # Update message_history with filtered messages
+        message_history = filtered_history
+        print("Cleared previous context messages from message history")
+
+        print("Data properly updated in pinecone db with new embedding")
         return jsonify({"message": "Update successful", "id": item_id, "text": new_text, "namespace": namespace})
 
     except Exception as e:
@@ -94,11 +123,26 @@ def set_level():
 
 @app.route('/get_data', methods=['POST'])
 def get_data():
-    global current_level
+    global current_level, message_history
     idx_name = "l" + str(current_level) + "-index"
     index = pc.Index(idx_name)
     print(f"index: {idx_name}")
     try:
+        # Clear previous context messages from message_history
+        # Keep only the original system prompt and non-context messages
+        filtered_history = []
+        for message in message_history:
+            # Keep the original system prompt
+            if message.get('role') == 'system' and not message.get('content', '').startswith('Relevant context from the database:'):
+                filtered_history.append(message)
+            # Keep user and assistant messages
+            elif message.get('role') in ['user']:
+                filtered_history.append(message)
+        
+        # Update message_history with filtered messages
+        message_history = filtered_history
+        print("Cleared previous context messages from message history")
+        
         query_response = index.fetch(
             ids=["vec1", "vec2", "vec3", "vec4", "vec5", "vec6", "vec7", "vec8", "vec9", "vec10"],
             namespace="ns1" 
@@ -130,7 +174,6 @@ def chat_with_gpt():
     if not user_input:
         return jsonify({"error": "No prompt provided"}), 400
 
-
     if current_level not in attempts_tracker:
         attempts_tracker[current_level] = 0
     attempts_tracker[current_level] += 1
@@ -150,26 +193,18 @@ def chat_with_gpt():
             print(f"Invalid message format: {message}")
             continue
 
-
-    attempts_tracker[current_level] += 1
-    dg = DataGraph(attempts_tracker)
-    dg.save_attempts()
-
-    message_history.append({"role": "user", "content": user_input})
-
     # This strengthens attack protection
     if re.search(r"(DROP|DELETE|TRUNCATE|ALTER|EXEC)", user_input, re.IGNORECASE):
         response_message = "Attempt detected! The system has rejected your input as potentially malicious."  
         message_history.append({"role": "assistant", "content": response_message})
         return jsonify({"message": response_message})
 
-    index_names = ["l3-index"]
-    index = pc.Index(index_names[0])
-
+    idx_name = "l" + str(current_level) + "-index"
     try:
+        index = pc.Index(idx_name)
         print("trying to find embedding")
         query_embedding = get_embedding(user_input)
-        pinecone_results = index.query(query_embedding, top_k=3, include_metadata=True, namespace="ns1")
+        pinecone_results = index.query(query_embedding, top_k=1, include_metadata=True, namespace="ns1")
         print(pinecone_results)
         context = "\n".join([match["metadata"].get("text", "") for match in pinecone_results["matches"]])
     except Exception as e:
@@ -179,6 +214,7 @@ def chat_with_gpt():
     if context:
         print("Context found")
         context_message = f"Relevant context from the database:\n{context}"
+        print(f"Context message: {context_message}")
         message_history.insert(0, {"role": "system", "content": context_message})
 
     # Append the user input to the conversation.
@@ -194,7 +230,8 @@ def chat_with_gpt():
     dg = DataGraph(attempts_tracker)
     dg.save_attempts()
 
-
+    for message in message_history:
+        print(message)
 
     try:
         response = openai.chat.completions.create(
@@ -204,43 +241,50 @@ def chat_with_gpt():
         )
 
         gpt_response = response.choices[0].message.content
-        message_history.append({"role": "assistant", "content": gpt_response})
+        #message_history.append({"role": "assistant", "content": gpt_response})
 
         # Check for success
         success = any(keyword in gpt_response.lower() for keyword in levels[current_level]["success_keywords"])
-        response_data = {
-            "message": gpt_response,
-            "success": success
-        }
-
+        
+        # Prepare the response with formatting for success
+        formatted_response = gpt_response
+        final_message = ""
+        
         if success:
-            current_level_data = levels[current_level]
-            response_data["level_complete"] = True
-            response_data["vulnerability_type"] = current_level_data["type"]
-            response_data["difficulty"] = current_level_data["difficulty"]
-            response_data["examples"] = current_level_data["examples"]
+            # Create success message with green text
+            success_msg = '<span style="color: green; font-weight: bold;">Exploit Successful!</span>\n'
+            success_msg += f'<span style="color: green;">Vulnerability type: {levels[current_level]["type"]}</span>\n'
+            success_msg += f'<span style="color: green;">Difficulty: {levels[current_level]["difficulty"]}</span>\n'
+            success_msg += '<span style="color: green;">Examples of successful attacks:</span>\n'
+            
+            for example in levels[current_level]["examples"]:
+                success_msg += f'<span style="color: green;">- {example}</span>\n'
             
             # Advance to next level
             current_level += 1
-            if current_level < len(levels):
-                attempts_tracker[current_level] = 0
-                response_data["next_level"] = {
-                    "level": current_level,
-                    "description": levels[current_level]["description"],
-                    "difficulty": levels[current_level]["difficulty"]
-                }
-            else:
-                response_data["game_complete"] = True
             
+            if current_level <= len(levels):
+                attempts_tracker[current_level] = 0
+            else:
+                # Create and save graph of attempts
+                dg = DataGraph(attempts_tracker)
+                dg.save_attempts()
+                dg.plot_attempts()
+            
+            final_message = formatted_response + "\n\n" + success_msg
+        else:
+            failure_msg = "\n\nYour attempt was unsuccessful. Think about how the AI interprets input and try again!"
+            final_message = formatted_response + failure_msg
+        
         # Save the attempts data
         dg = DataGraph(attempts_tracker)
         dg.save_attempts()
-        print("returning some data")
         
-        return jsonify(response_data)
+        return jsonify({"message": final_message, "success": success})
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        print(f"Error in chat completion: {str(e)}")
+        return jsonify({"error": str(e), "message": "An error occurred while processing your request."}), 500
 
 
 if __name__ == "__main__":

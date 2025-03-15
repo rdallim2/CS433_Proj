@@ -163,6 +163,7 @@ a{
     text-align: center;
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
+    width: 87%;
     height: 85%;
     scrollbar-color: grey transparent; /* Blue thumb, transparent track */
 }
@@ -271,6 +272,13 @@ textarea {
     font-size: 16px;
     color: white;
     font: roboto-mono;
+    outline: none; /* Remove default focus outline */
+}
+
+/* Custom focus style - keeping the same border */
+textarea:focus {
+    border: 1px solid #ccc; /* Keep the exact same border on focus */
+    box-shadow: none; /* No glow effect */
 }
 
 button {
@@ -311,7 +319,7 @@ button:hover {
     text-align: left;
 }
 
-.llm-reponse {
+.llm-response {
     align-self: flex-start; /* Aligns LLM messages to the left */
     padding: 8px 12px;
     border-radius: 5px;
@@ -319,6 +327,38 @@ button:hover {
     word-wrap: break-word;
     border-radius: 0px;
     text-align: left;
+}
+
+/* Success message styles */
+.llm-response span[style*="color: green"] {
+    display: inline-block;
+    margin: 2px 0;
+    line-height: 1.4;
+}
+
+.llm-response span[style*="font-weight: bold"] {
+    font-size: 1.1em;
+    margin: 6px 0;
+}
+
+/* Add a subtle box around success sections */
+.llm-response span[style*="color: green; font-weight: bold"]:first-of-type {
+    border-top: 1px solid #4CAF50;
+    padding-top: 8px;
+    margin-top: 12px;
+    display: block;
+}
+
+/* Add spacing after the success section */
+.llm-response span[style*="color: green"]:last-of-type {
+    margin-bottom: 8px;
+}
+
+/* Ensure success messages have good contrast */
+.llm-response {
+    padding: 12px;
+    border-radius: 8px;
+    white-space: pre-line;
 }
 
 
