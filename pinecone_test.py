@@ -6,7 +6,6 @@ import time
 # Initialize a Pinecone client with your API key
 pc = Pinecone(api_key="pcsk_5GB85s_sYd6Hrb3nHfQ4Bi2aTWLmMnL85SHyc6bQ6H2cU26MZowiUyFn7pHUaA7DgvPJ2")
 
-
 index_name = "test-idx-2"
 '''pc.create_index(
     name=index_name,

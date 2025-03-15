@@ -216,3 +216,51 @@ function handleLevelClick(event, level) {
     })
     .catch(error => console.error('Error in sequence:', error));
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const quizModal = document.getElementById("quizModal");
+    const submitQuiz = document.getElementById("submitQuiz");
+
+    function showQuiz() {
+        quizModal.style.display = "block";
+    }
+
+    submitQuiz.addEventListener("click", function () {
+        const answers = {};
+        document.querySelectorAll(".quiz-question").forEach((questionDiv, index) => {
+            const selectedOption = questionDiv.querySelector("input[name='quizOption" + index + "']:checked");
+            answers[`Question ${index + 1}`] = selectedOption ? selectedOption.value : "No answer";
+        });
+
+        // Send answers to be saved
+        fetch("/save_quiz_answers", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ answers: answers })
+        })
+        .then(response => response.json())
+        .then(data => console.log("Quiz answers saved:", data))
+        .catch(error => console.error("Error saving quiz answers:", error));
+
+        quizModal.style.display = "none"; // Hide quiz modal
+        startGame();
+    });
+
+    function startGame() {
+        console.log("Game Starting...");
+
+    }
+
+    // Show quiz at the start of the game
+    showQuiz();
+
+    // Show quiz at the end of the game as well
+    document.addEventListener("gameCompleted", function () {
+        quizModal.querySelector("h2").textContent = "Quick Quiz Before You Finish";
+        quizModal.style.display = "block";
+    });
+});
+
+

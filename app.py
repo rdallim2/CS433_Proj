@@ -1,9 +1,11 @@
 import openai
+import os
 import re
 from graph import DataGraph
 from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
-from pinecone.grpc import PineconeGRPC as Pinecone
+import pinecone
+#from pinecone.grpc import PineconeGRPC as Pinecone
 from pinecone import ServerlessSpec
 import time
 from embeddings_data import *
@@ -26,10 +28,14 @@ message_history = [system_prompt]
 #OPEN AI KEY
 with open("key.txt", "r") as f:
     openai.api_key = f.read().strip()
+#print(f"DEBUG: Loaded Pinecone API Key: '{openai.api_key}' (length: {len(openai.api_key)})")
+
+
 
 with open("p_key.txt", "r") as f:
     p_api_key = f.read().strip()
 
+#print(f"DEBUG: Loaded Pinecone API Key: '{p_api_key}' (length: {len(p_api_key)})")
 pc = Pinecone(api_key=p_api_key)
 
 
@@ -160,7 +166,33 @@ def get_data():
         print(f"Error fetching data: {str(e)}")
         return jsonify({'error': str(e)}), 500
     
+@app.route('/save_quiz_answers', methods=['POST'])
+def save_quiz_answers():
+    try:
+        data = request.get_json()
+        answers = data.get("answers", {})
+        folder_name = "quiz_answers"
+        os.makedirs(folder_name, exist_ok=True)
+        # Determine the next available filename (if quiz_answers has already been used it created quiz_answers1)
+        base_filename = "quiz_answers"
+        extension = ".txt"
+        filename = os.path.join(folder_name, f"{base_filename}{extension}")
+        counter = 1
 
+        while os.path.exists(filename):
+            filename = os.path.join(folder_name, f"{base_filename}{counter}{extension}")
+            counter += 1
+
+        # Save answers to the correct file
+        with open(filename, "a") as f:
+            f.write("Quiz Answers:\n")
+            for question, answer in answers.items():
+                f.write(f"{question}: {answer}\n")
+            f.write("\n")
+
+        return jsonify({"message": f"Quiz answers saved in {filename}"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/ask', methods=['GET', 'POST'])
 def chat_with_gpt():
@@ -275,6 +307,8 @@ def chat_with_gpt():
         else:
             failure_msg = "\n\nYour attempt was unsuccessful. Think about how the AI interprets input and try again!"
             final_message = formatted_response + failure_msg
+            response_data["trigger_end_quiz"] = True
+            response_data["game_complete"] = True
         
         # Save the attempts data
         dg = DataGraph(attempts_tracker)
