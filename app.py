@@ -4,7 +4,8 @@ import re
 from graph import DataGraph
 from flask import Flask, render_template, request, jsonify
 from dotenv import load_dotenv
-from pinecone.grpc import PineconeGRPC as Pinecone
+import pinecone
+#from pinecone.grpc import PineconeGRPC as Pinecone
 from pinecone import ServerlessSpec
 import time
 from embeddings_data import *

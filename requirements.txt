@@ -1,0 +1,6 @@
+flask
+openai
+dotenv
+pinecone
+matplotlib
+requests
