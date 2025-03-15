@@ -321,5 +321,37 @@ button:hover {
     text-align: left;
 }
 
+/*------------------------- Quiz CONTAINER ------------------------------*/
+
+.quiz-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 2px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.5);
+    text-align: left;
+    z-index: 1000;
+    font-size: 10px;
+    display: none;
+}
+
+.quiz-container {
+    color: black;
+}
+
+#submitQuiz {
+    padding: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+    background-color: #010056;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    width: 100%;
+}
+
 
 
